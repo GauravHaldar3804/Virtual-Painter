@@ -28,7 +28,16 @@ while True :
 
     # 2. Find Hand Landmarks
     img = detector.findHands(img)
+    lmList,bbox = detector.findPosition(img,draw=False)
+
+    if len(lmList) != 0:
+        # Getting Landmarks For Index and Middlefinger
+        x1,y1 = lmList[8][1:]
+        x2,y2 = lmList[12][1:]
+
     # 3. Check which fingers are up
+        fingers = detector.fingersUp()
+        print(fingers)
     # 4. If Selection Mode - Two finger are up
     # 5. If Drawing Mode - Index finger is up
 

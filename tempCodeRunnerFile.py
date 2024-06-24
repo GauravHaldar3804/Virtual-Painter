@@ -1,0 +1,1 @@
+fingers = detector.fingersUp()

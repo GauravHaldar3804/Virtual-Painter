@@ -68,24 +68,46 @@ class handDetector:
     
     def fingersUp(self):
         fingers = []
-        if self.lmlists[self.tipIds[1]][1] < self.lmlists[self.tipIds[4]][1]:
-            if self.lmlists[self.tipIds[0]][1] < self.lmlists[self.tipIds[0]-1][1]:
-                fingers.append(1)
-            else:
-                fingers.append(0)
+        if self.lmlists[5][2] < self.lmlists[0][2]:
+            if self.lmlists[self.tipIds[1]][1] < self.lmlists[self.tipIds[4]][1]:
+                if self.lmlists[self.tipIds[0]][1] < self.lmlists[self.tipIds[0]-1][1]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
 
-        elif self.lmlists[self.tipIds[1]][1] > self.lmlists[self.tipIds[4]][1]:
-            if self.lmlists[self.tipIds[0]][1] > self.lmlists[self.tipIds[0]-1][1]:
-                fingers.append(1)
-            else:
-                fingers.append(0)
+            elif self.lmlists[self.tipIds[1]][1] > self.lmlists[self.tipIds[4]][1]:
+                if self.lmlists[self.tipIds[0]][1] > self.lmlists[self.tipIds[0]-1][1]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
 
-        for id in range(1,5):
+            for id in range(1,5):
 
-            if self.lmlists[self.tipIds[id]][2] < self.lmlists[self.tipIds[id]-2][2]:
-                fingers.append(1)
-            else:
-                fingers.append(0)
+                if self.lmlists[self.tipIds[id]][2] < self.lmlists[self.tipIds[id]-2][2]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+
+
+        elif self.lmlists[5][2] > self.lmlists[0][2]:
+            if self.lmlists[self.tipIds[1]][1] < self.lmlists[self.tipIds[4]][1]:
+                if self.lmlists[self.tipIds[0]][1] < self.lmlists[self.tipIds[0]-1][1]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+
+            elif self.lmlists[self.tipIds[1]][1] > self.lmlists[self.tipIds[4]][1]:
+                if self.lmlists[self.tipIds[0]][1] > self.lmlists[self.tipIds[0]-1][1]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+
+            for id in range(1,5):
+
+                if self.lmlists[self.tipIds[id]][2] < self.lmlists[self.tipIds[id]-2][2]:
+                    fingers.append(0)
+                else:
+                    fingers.append(1)
         return fingers
 
 
