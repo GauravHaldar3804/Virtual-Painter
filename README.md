@@ -19,9 +19,9 @@ This project implements a virtual painting application using hand tracking with 
 ## Usage
 
 1. Clone or download the repository.
-2. Install the required libraries: `pip install opencv-python`
-3. Ensure you have the `handtrackingmodule.py` file in the same directory as your main script.
-4. Run the `main.py` script.
+2. Install the required libraries: `pip install opencv-python`,`pip install mediapipe`
+4. Ensure you have the `handtrackingmodule.py` file in the same directory as your main script.
+5. Run the `main.py` script.
 
 ## Code Overview
 
