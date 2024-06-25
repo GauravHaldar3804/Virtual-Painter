@@ -1,43 +1,62 @@
 # Virtual Paint with Hand Tracking
 
-This project implements a virtual painting application using hand tracking with OpenCV and Python. Users can interact with the canvas using their fingers to draw and erase.
+This project implements a virtual painting application using hand tracking. It allows users to draw and erase on a virtual canvas using their hand gestures captured through a webcam.
 
-## Features
+## Functionality
 
-* **Selection:** Choose drawing or erasing mode by raising two fingers (index and middle).
-* **Color Selection:** Select different drawing colors from a designated area on the header.
-* **Drawing:** Draw on the canvas using your index finger.
-* **Erasing:** Erase parts of the drawing with a thicker "eraser" effect using your index finger.
-* **Customization:** Adjust brush thickness and eraser size for a personalized experience (code modifications required).
+The application offers the following functionalities:
 
-## Requirements
+* **Color Selection:** Users can choose different drawing colors from a designated area on the screen.
+* **Brush Thickness Control:** The thickness of the brush can be adjusted using a slider displayed on the side of the canvas.
+* **Eraser:** Users can erase unwanted drawings using their hand gestures.
+* **Eraser Thickness Control:** Similar to the brush, the eraser thickness can also be adjusted.
 
-* Python 3.x (https://www.python.org/downloads/)
-* OpenCV library (`pip install opencv-python`)
-* `handtrackingmodule.py` (custom module for hand detection and finger tracking)
+## Dependencies
+
+The code relies on the following external libraries:
+
+* OpenCV (cv2)
+* NumPy (np)
+* os
+* MediaPipe (https://ai.google.dev/edge/mediapipe/solutions/guide)
+* handtrackingmodule.py (**Note:** This module needs to be created based on MediaPipe hand tracking)
 
 ## Usage
 
-1. Clone or download the repository.
-2. Install the required libraries: `pip install opencv-python`,`pip install mediapipe`
-4. Ensure you have the `handtrackingmodule.py` file in the same directory as your main script.
-5. Run the `main.py` script.
+1. Make sure you have OpenCV, NumPy, and `handtrackingmodule.py` installed. You'll also need to install MediaPipe following the official instructions (https://ai.google.dev/edge/mediapipe/solutions/guide).
+2. Place the code in a Python file named `main.py`.
+3. Run the script using `python main.py`.
 
-## Code Overview
+## Code Explanation
 
-**main.py**
+The code is divided into several sections:
 
-The core script imports necessary libraries, defines variables, and performs the following tasks in a continuous loop:
+**1. Setting Up:**
 
-1. **Image Capture:** Reads frames from the webcam.
-2. **Hand Detection:** Uses the `handtrackingmodule` to detect hands and their landmarks.
-3. **Finger Tracking:** Analyzes finger positions to determine drawing or erasing mode.
-4. **Color Selection:** Updates the drawing color based on finger location in the header area.
-5. **Drawing:** Draws on the canvas based on finger movement.
-6. **Erasing:** Erases parts of the canvas using a thicker effect.
-7. **Canvas and Header Overlay:** Combines the drawing canvas with the header image.
-8. **Display:** Shows the resulting image with the canvas and header.
+* Imports necessary libraries, including `mediapipe` for hand tracking.
+* Defines paths to folders containing images and the hand tracking module.
+* Initializes variables for brush and eraser thickness, color selection, and image canvas.
+* Creates a MediaPipe hand detector object.
 
-## Contributing
+**2. Main Loop:**
 
-Feel free to fork this repository and make improvements! We welcome contributions to enhance features, fix bugs, or add functionalities.
+* Captures video frames from the webcam.
+* Flips the captured frame horizontally for a more natural drawing experience.
+* Uses the MediaPipe hand detector to find hand landmarks in the frame.
+* Analyzes finger positions to determine drawing mode (selection or drawing/erasing) and color selection.
+* Based on the drawing mode and selected color/eraser, updates the virtual canvas accordingly.
+* Displays the brush/eraser thickness control bars on the side.
+* Overlays the selected color palette on top of the main window.
+* Combines the virtual canvas with the original video frame to display the final output.
+
+## Creating the handtrackingmodule.py
+
+The `handtrackingmodule.py` file should be created to handle hand detection and fingertip landmark extraction using MediaPipe. You can find tutorials and code examples online to achieve this functionality using MediaPipe's Python API.
+
+## Further Enhancements
+
+* Implement additional drawing tools (e.g., shapes, lines).
+* Allow saving and loading drawings.
+* Refine hand tracking accuracy for a smoother drawing experience.
+
+This README provides a basic overview of the code's functionality and usage. Feel free to modify and enhance it to better suit your project's specific needs.
