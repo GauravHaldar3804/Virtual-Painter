@@ -69,6 +69,7 @@ while True :
                 if 250<x1<450:
                     drawColor = (255,0,255)
                     header = overlayList[0]
+                    header1 = header
 
                 elif 550<x1<750:
                     drawColor = (0,255,0)
