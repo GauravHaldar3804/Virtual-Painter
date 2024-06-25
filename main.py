@@ -12,13 +12,27 @@ for imgPath in myList:
     image = cv.imread(f"{folder}/{imgPath}")
     overlayList.append(image)
 
-brushThichness = 15
-eraserThickness = 100
+brushThickness = 15
+brushThicknessMin = 5
+brushThicknessMax = 50
+brushThicknessRange = brushThicknessMax - brushThicknessMax
+brushBar = 420
+
+eraserThickness = 60
+eraserThicknessMin = 30
+eraserThicknessMax = 150
+eraserThicknessRange = eraserThicknessMax - eraserThicknessMax
+eraserBar = 410
+
 xp = 0
 yp = 0
 imgCanvas = np.zeros((720,1280,3),np.uint8)
 header = overlayList[0]
+header1 = overlayList[0]
+
+
 drawColor = (255,0,255)
+eraseColor = (0,0,0)
 cam = cv.VideoCapture(0)
 cam.set(3,1280)
 cam.set(4,720)
@@ -45,7 +59,8 @@ while True :
 
         # 4. If Selection Mode - Two finger are up
         if fingers[1] and fingers[2]:
-            print("Selection Mode")
+            # print("Selection Mode")
+            header = header1
             xp = 0
             yp = 0
             
@@ -58,34 +73,69 @@ while True :
                 elif 550<x1<750:
                     drawColor = (0,255,0)
                     header = overlayList[1]
+                    header1 = header
 
                 elif 800<x1<950:
                     drawColor = (255,0,0)
                     header = overlayList[2]
+                    header1 = header
 
                 elif 1050<x1<1200:
-                    drawColor = (0,0,0)
+                    eraseColor = (0,0,0)
                     header = overlayList[3]
+                    header1 = header
+            if 25 < x1 < 85 and 145 < y1 < 500 :
+                cv.rectangle(img,(43,int(y1)),(62,500),drawColor,cv.FILLED)
+                brushThickness = int(np.interp(y1,[145,500],[brushThicknessMax,brushThicknessMin]))
+                print(brushThickness,y1)
+                brushBar = y1
+
+            if 1200 < x1 < 1265 and 145 < y1 < 500 :
+                cv.rectangle(img,(1215,int(y1)),(1240,500),eraseColor,cv.FILLED)
+                eraserThickness = int(np.interp(y1,[145,500],[eraserThicknessMax,eraserThicknessMin]))
+                print(eraserThickness,y1)
+                eraserBar = y1
+
+            
 
             cv.rectangle(img , (x1 , y1-25) , (x2 , y2+25) , drawColor , cv.FILLED)
         # 5. If Drawing Mode - Index finger is up
         elif fingers[1] and fingers[2] == False:
-            print("Drawing Mode")
-            cv.circle(img,(x1,y1),brushThichness//2,drawColor,cv.FILLED)
+            # print("Drawing Mode")
+            header = header1
+            cv.circle(img,(x1,y1),brushThickness//2,drawColor,cv.FILLED)
 
             if xp == 0 and yp == 0:
                 xp = x1
                 yp = y1
-
-            if drawColor == (0,0,0):
-                cv.line(imgCanvas,(xp,yp),(x1,y1),drawColor,eraserThickness)
-                cv.circle(img,(x1,y1),eraserThickness//2,drawColor,cv.FILLED)
                 
 
-            cv.line(imgCanvas,(xp,yp),(x1,y1),drawColor,brushThichness)
+            cv.line(imgCanvas,(xp,yp),(x1,y1),drawColor,brushThickness)
+            xp = x1
+            yp = y1
+        else :
+            eraseColor = (0,0,0)
+            header = overlayList[3]
+            cv.line(imgCanvas,(xp,yp),(x1,y1),eraseColor,eraserThickness)
+            cv.circle(img,(x1,y1),eraserThickness//2,eraseColor,cv.FILLED)
+            if xp == 0 and yp == 0:
+                xp = x1
+                yp = y1
             xp = x1
             yp = y1
 
+    cv.rectangle(img,(40,145),(65,500),(255,255,0),3)
+    cv.putText(img,f"{str(int(brushThickness))}",(30,530),cv.FONT_HERSHEY_SIMPLEX,1,drawColor,2)
+    cv.putText(img,f"Brush",(20,560),cv.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+    cv.putText(img,f"Thickness",(5,590),cv.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+    cv.rectangle(img,(43,int(brushBar)),(62,500),drawColor,cv.FILLED)
+
+    cv.rectangle(img,(1215,145),(1240,500),(255,255,0),3)
+    cv.putText(img,f"{str(int(eraserThickness))}",(1200,530),cv.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2)
+    cv.putText(img,f"Eraser",(1140,560),cv.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+    cv.putText(img,f"Thickness",(1120,590),cv.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
+    cv.rectangle(img,(1215,int(eraserBar)),(1240,500),eraseColor,cv.FILLED)
+    
     imgGray = cv.cvtColor(imgCanvas,cv.COLOR_BGR2GRAY)
     _ , imgInv = cv.threshold(imgGray , 10 , 255 , cv.THRESH_BINARY_INV)
     imgInv = cv.cvtColor(imgInv,cv.COLOR_GRAY2BGR)
